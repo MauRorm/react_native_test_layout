@@ -1,0 +1,11 @@
+nirvanarita         
+Mauricio Romero 
+
+
+npm install expo-cli -g
+matar desde el admin de tareas el adb
+
+expo build:android -t apk
+
+
+    

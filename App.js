@@ -23,31 +23,13 @@ export default class VerticalStackLayout extends Component {
     this.state = { ...CUSTOM_STATE };
   }
 
-  getMoviesFromApiAsync() {
-    return fetch('https://facebook.github.io/react-native/movies.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          movies: responseJson.movies
-        })
-        return responseJson.movies;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   renderSection(selectedTab = null) {
     
     switch (selectedTab) {
       case "1":
         return <ScrollView>
           {
-            this.state.movies.map((item)=>{
-              return(
-                <Text key={item.id}>{item.title}</Text>
-              )
-            })
+             <Text>uno</Text>
           }
         </ScrollView>;
         break;
@@ -119,13 +101,11 @@ export default class VerticalStackLayout extends Component {
             onPress={() => {
               this.setState({
                 selectedTab: "1"
-              }, ()=>{
-                this.getMoviesFromApiAsync();
               });
             }}
             style={styles.tabOne}
           >
-            <Text style={styles.tabsText}>Uno</Text>
+            <Text style={styles.tabsText}>Tab1</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
