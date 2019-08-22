@@ -1,6 +1,13 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Text, TextInput, Button } from "react-native";
-import { Input } from "../../components/react-native-elements";
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ScrollView
+} from "react-native";
+import { Input, ListItem } from "../../components/react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Redirect, withRouter } from "react-router-native";
 
@@ -27,7 +34,7 @@ const CUSTOM_STATE = {
   password: ""
 };
 
-class Login extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = { ...CUSTOM_STATE };
@@ -48,46 +55,49 @@ class Login extends React.Component {
   }
 
   render() {
+    const list = [
+      {
+        name: "México",
+        avatar_url: "../../assets/mexico.png",
+        subtitle: "Historias de los 32 estados de la república mexicana"
+      },
+      {
+        name: "Estados Unidos",
+        avatar_url: "../../assets/inglaterra.png",
+        subtitle: "Historias de los 52 estados de Estados Unidos de América"
+      }
+    ];
     const audio_options = {
       source: { local: require("../../assets/sh-lisas-theme.mp3") } //ex. require('./music/sample.mp3')
     };
     return (
-      <View style={styles.container}>
-        <BgAudio options={audio_options} />
-        <View style={{}}>
-          <Input
-            placeholder="Usuario"
-            leftIcon={<Icon name="user" size={24} color="black" />}
-            value={this.state.login}
-            editable={true}
-            onChangeText={login => this.setState({ login })}
-          />
-        </View>
-        <View style={{}}>
-          <Input
-            placeholder="Contraseña"
-            leftIcon={<Icon name="unlock-alt" size={24} color="black" />}
-            value={this.state.password}
-            editable={true}
-            onChangeText={password => this.setState({ password })}
-          />
-        </View>
-        <Button
-          onPress={() => {
-            this.props.history.push("/dashboard");
+      <ScrollView style={styles.container}>
+        <ListItem
+          leftAvatar={{ source: require("../../assets/mexico.png") }}
+          title={'México'}
+          subtitle={'Historias de los 32 estados de la república mexicana'}
+          contentContainerStyle={styles.container}
+          onPress={()=>{
+
           }}
-          title="Entrar"
         />
-      </View>
+        <ListItem
+          leftAvatar={{ source: require("../../assets/inglaterra.png") }}
+          title={'Inglaterra'}
+          subtitle={"Historias de de la nueva y vieja Inglaterra"}
+          contentContainerStyle={styles.container}
+          onPress={()=>{
+
+          }}
+        />
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#3F2E71",
-    width: "100%",
-    height: "100%"
+    backgroundColor: "#FFFFFF"
   },
   logo: {
     flex: 1,
@@ -102,4 +112,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withRouter(Login);
+export default withRouter(Dashboard);

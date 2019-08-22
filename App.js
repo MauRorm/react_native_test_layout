@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import Login from './containers/login/login';
+import Dashboard from './containers/dashboard/dashboard';
 
 const CUSTOM_STATE = {
 };
@@ -30,6 +31,7 @@ export default class VerticalStackLayout extends Component {
       <NativeRouter>
       <View style={styles.container}>  
         <Route exact path="/" component={Login} />
+        <Route exact path="/dashboard" component={Dashboard} />
         {
           /*
                   <Route path="/about" component={About} />
