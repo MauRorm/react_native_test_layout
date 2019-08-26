@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#3F2E71",
     width: "100%",
-    height: "100%"
+    height: "100%",
+    marginTop: 25,
   },
   logo: {
     flex: 1,

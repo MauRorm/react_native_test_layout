@@ -11,7 +11,8 @@ import {
   Input,
   ListItem,
   Header,
-  Icon
+  Icon,
+  Divider,
 } from "../../components/react-native-elements";
 import { Col, Row, Grid } from "react-native-easy-grid";
 //import Icon from "react-native-vector-icons/FontAwesome";
@@ -38,7 +39,8 @@ const colors = {
 const CUSTOM_STATE = {
   width: "0%",
   isOpenMenu: false,
-  widthPrincipal: "100%"
+  widthPrincipal: "100%",
+  searchText:'',
 };
 
 class Dashboard extends React.Component {
@@ -47,7 +49,9 @@ class Dashboard extends React.Component {
     this.state = { ...CUSTOM_STATE };
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    //this.props.match.params.idCountry
+  }
 
   handleEmailChange(email) {
     this.setState({ email: email });
@@ -62,6 +66,9 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    const {
+      searchText,
+    } = this.state;
     const list = [
       {
         name: "México",
@@ -92,12 +99,12 @@ class Dashboard extends React.Component {
         backgroundColor: "#DADDEA"
       },
       itemTwo: {
-        flexWrap: 'wrap',
+        flexWrap: "wrap",
         width: this.state.widthPrincipal,
         backgroundColor: "#1739D1",
         flexDirection: "column",
-        height: '100%',
-        position: 'relative'
+        height: "100%",
+        position: "relative"
       },
 
       container: {
@@ -108,8 +115,8 @@ class Dashboard extends React.Component {
         marginTop: "200"
       },
 
-      tamano:{
-        height:'100%'
+      tamano: {
+        height: "100%"
       }
     });
 
@@ -142,36 +149,49 @@ class Dashboard extends React.Component {
             );
           }}
           centerComponent={{
-            text: "Selecciona país",
+            text: "Busca una historia",
             style: { color: "#fff" }
           }}
-          rightComponent={{ icon: "home", color: "#fff" }}
+          rightComponent={() => {
+            return (
+              <Icon
+                name="arrow-left"
+                type="evilicon"
+                color="#FFFFFF"
+                onPress={() => {
+                  this.props.history.push("/dashboard");
+                }}
+              />
+            );
+          }}
         />
         <View style={styles.containerBkd}>
           <View style={styles.item}>
-            <Text>menu</Text>
+            <Text
+              onPress={()=>{
+                this.props.history.push("/");
+              }}
+            >Logout</Text>
+            <Divider style={{ backgroundColor: 'blue' }} />
           </View>
           <View style={styles.itemTwo}>
-            
+            <Input
+              value={searchText}
+              placeholder="Busca titulo de historia"
+              leftIcon={{ type: "font-awesome", name: "chevron-left" }}
+              onChangeText={searchText => this.setState({ searchText })}
+            />
+            <ScrollView>
             <ListItem
-              leftAvatar={{ source: require("../../assets/mexico.png") }}
-              title={"México"}
-              subtitle={"Historias de los 32 estados de la república mexicana"}
+              title={"Niña del metro Tacubaya"}
+              subtitle={"Lo anterior ha derivado en historias de presuntas extrañas energías dentro de sus estructuras, que salen a flote en forma de 'fantasmas' y 'espectros'."}
               containerStyle={styles.container}
               contentContainerStyle={styles.container}
               onPress={() => {
-                this.props.history.push("/historiesBoard/mx");
+                //this.props.history.push("/historiesBoard/mx");
               }}
             />
-            <ListItem
-              leftAvatar={{ source: require("../../assets/inglaterra.png") }}
-              title={"Inglaterra"}
-              subtitle={"Historias de de la nueva y vieja Inglaterra"}
-              containerStyle={styles.container}
-              contentContainerStyle={styles.container}
-              onPress={() => {}}
-            />
-            
+            </ScrollView>
           </View>
         </View>
       </View>
@@ -180,74 +200,3 @@ class Dashboard extends React.Component {
 }
 
 export default withRouter(Dashboard);
-
-/*
-
-
-
-      <View>
-        <View>
-          <Header
-            placement={"left"}
-            leftComponent={() => {
-              return (
-                <Icon
-                  name="navicon"
-                  type="evilicon"
-                  color="#FFFFFF"
-                  onPress={() => {
-                    if (this.state.isOpenMenu === false) {
-                      this.setState({
-                        width: "50%",
-                        widthPrincipal: "50%",
-                        isOpenMenu: true
-                      });
-                    } else {
-                      this.setState({
-                        width: "0%",
-                        widthPrincipal: "100%",
-                        isOpenMenu: false
-                      });
-                    }
-                  }}
-                />
-              );
-            }}
-            centerComponent={{
-              text: "Selecciona país",
-              style: { color: "#fff" }
-            }}
-            rightComponent={{ icon: "home", color: "#fff" }}
-          />
-        </View>
-
-        <View style={styles.containerBkd}>
-          <View style={styles.item}>
-            <Text>oooo</Text>
-          </View>
-          <ScrollView style={styles.itemTwo}>
-            <ListItem
-              leftAvatar={{ source: require("../../assets/mexico.png") }}
-              title={"México"}
-              subtitle={"Historias de los 32 estados de la república mexicana"}
-              containerStyle={styles.container}
-              contentContainerStyle={styles.container}
-              onPress={() => {
-                this.props.history.push("/historiesBoard/mx");
-              }}
-            />
-            <ListItem
-              leftAvatar={{ source: require("../../assets/inglaterra.png") }}
-              title={"Inglaterra"}
-              subtitle={"Historias de de la nueva y vieja Inglaterra"}
-              containerStyle={styles.container}
-              contentContainerStyle={styles.container}
-              onPress={() => {}}
-            />
-          </ScrollView>
-        </View>
-      </View>
-    
-
-
-*/
