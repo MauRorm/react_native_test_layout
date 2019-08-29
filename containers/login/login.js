@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { Image, StyleSheet, View, Text, TextInput, Button, ImageBackground } from "react-native";
 import { Input } from "../../components/react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Redirect, withRouter } from "react-router-native";
@@ -52,9 +52,10 @@ class Login extends React.Component {
       source: { local: require("../../assets/sh-lisas-theme.mp3") } //ex. require('./music/sample.mp3')
     };
     return (
-      <View style={styles.container}>
+      <ImageBackground style={styles.container} source={require("../../assets/tumblr_m7im2ftfI81rtuzomo1_500.gif")}>
         <BgAudio options={audio_options} />
-        <View style={{}}>
+        <View style={styles.form}>
+        <View style={styles.form}>
           <Input
             placeholder="Usuario"
             leftIcon={<Icon name="user" size={24} color="black" />}
@@ -63,7 +64,7 @@ class Login extends React.Component {
             onChangeText={login => this.setState({ login })}
           />
         </View>
-        <View style={{}}>
+        <View style={styles.form}>
           <Input
             placeholder="Contraseña"
             leftIcon={<Icon name="unlock-alt" size={24} color="black" />}
@@ -76,9 +77,11 @@ class Login extends React.Component {
           onPress={() => {
             this.props.history.push("/dashboard");
           }}
+          style={styles.form}
           title="Entrar"
         />
-      </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -88,7 +91,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#3F2E71",
     width: "100%",
     height: "100%",
-    marginTop: 25,
+    flex: 1,
+    resizeMode: 'cover',
   },
   logo: {
     flex: 1,
@@ -97,9 +101,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   form: {
-    flex: 1,
-    justifyContent: "center",
-    width: "80%"
+    marginTop: '40%',
   }
 });
 

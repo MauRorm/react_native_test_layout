@@ -5,7 +5,8 @@ import {
   View,
   Text,
   TextInput,
-  ScrollView
+  ScrollView,
+  ImageBackground
 } from "react-native";
 import {
   Input,
@@ -90,7 +91,7 @@ class Dashboard extends React.Component {
       containerBkd: {
         height: "100%",
         width: "100%",
-        backgroundColor: "#D11717",
+        //backgroundColor: "#D11717",
         flexDirection: "row",
         flex: 1
       },
@@ -102,7 +103,7 @@ class Dashboard extends React.Component {
       itemTwo: {
         flexWrap: "wrap",
         width: this.state.widthPrincipal,
-        backgroundColor: "#1739D1",
+        //backgroundColor: "#1739D1",
         flexDirection: "column",
         height: "100%",
         position: "relative"
@@ -247,7 +248,7 @@ class Dashboard extends React.Component {
     ];
 
     return (
-      <View style={styles.tamano}>
+      <ImageBackground style={styles.tamano} source={require("../../assets/tumblr_ndsytwFGJ31sin489o1_500.gif")}>
         <Header
           placement={"left"}
           leftComponent={() => {
@@ -343,7 +344,7 @@ class Dashboard extends React.Component {
             <Text>{this.state.historyItem.text}</Text>
           </ScrollView>
         </Overlay>
-      </View>
+      </ImageBackground>
     );
   }
 }
