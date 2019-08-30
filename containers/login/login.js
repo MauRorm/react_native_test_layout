@@ -44,7 +44,7 @@ class Login extends React.Component {
   }
 
   componentWillMount() {
-    const currentTime = moment("6:00 pm", "h:mm a")
+    const currentTime = moment()
       .format("h:mm a")
       .toString();
 
