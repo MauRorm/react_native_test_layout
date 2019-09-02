@@ -44,29 +44,35 @@ class Login extends React.Component {
   }
 
   componentWillMount() {
-    const currentTime = moment()
-      .format("h:mm a")
-      .toString();
+    var currentTimeR= moment();    // e.g. 11:00 pm
+    var startTime = moment('07:30 pm', "HH:mm a");
+    var endTime = moment('11:59:00 pm', "HH:mm a");
 
-    const morningTime = moment("7:30 am", "h:mm a").toString();
-    const nightTime = moment("7:00 pm", "h:mm a").toString();
+    var startTimeTwo = moment('12:00 am', "HH:mm a");
+    var endTimeTwo = moment('07:20 am', "HH:mm a");
+
+    var startTimeThree = moment('07:21 am', "HH:mm a");
+    var endTimeThree = moment('07:29:00 pm', "HH:mm a");
+
+
+    const amIBetween = currentTimeR.isBetween(startTime , endTime);
     if (
-      moment(currentTime, "h:mm a").isBefore(morningTime, "h:mm a") === true
+      currentTimeR.isBetween(startTime , endTime) === true
     ) {
       this.setState({
         dayMoment: "night"
       });
     } else if (
-      moment(nightTime, "h:mm a").isBefore(currentTime, "h:mm a") === true
+      currentTimeR.isBetween(startTimeTwo , endTimeTwo) === true
     ) {
       this.setState({
         dayMoment: "night"
       });
     } else if (
-      moment(currentTime, "h:mm a").isSame(nightTime, "h:mm a") === true
+      currentTimeR.isBetween(startTimeThree , endTimeThree) === true
     ) {
       this.setState({
-        dayMoment: "night"
+        dayMoment: "morning"
       });
     } else {
       this.setState({
