@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import {
   Input,
@@ -42,6 +43,7 @@ const CUSTOM_STATE = {
   isOpenMenu: false,
   widthPrincipal: "100%",
   dayMoment: "",
+  animating: true,
 };
 
 class Dashboard extends React.Component {
@@ -51,6 +53,13 @@ class Dashboard extends React.Component {
   }
 
   componentWillMount() {
+    //this.props.match.params.idCountry
+    setTimeout(()=>{
+      this.setState({
+        animating: false,
+      })
+    }, 300);
+
     var currentTimeR= moment();    // e.g. 11:00 pm
     var startTime = moment('07:30 pm', "HH:mm a");
     var endTime = moment('11:59:00 pm', "HH:mm a");
@@ -116,7 +125,7 @@ class Dashboard extends React.Component {
     const audio_options = {
       source: { local: require("../../assets/sh-lisas-theme.mp3") } //ex. require('./music/sample.mp3')
     };
-    const { dayMoment } = this.state;
+    const { dayMoment, animating } = this.state;
     const styles = StyleSheet.create({
       containerBkd: {
         height: "100%",
@@ -202,28 +211,44 @@ class Dashboard extends React.Component {
           <View style={styles.item}>
             <Text>menu</Text>
           </View>
-          <View style={styles.itemTwo}>
+
+          {
+              animating === true
+              ?
+              <ActivityIndicator
+              animating = {animating}
+              color = '#bc2b78'
+              size = "large"
+              style = {{
+               flex: 1,
+               justifyContent: 'center',
+               alignItems: 'center',
+               height: 80
+            }}/>
+              :
+              <View style={styles.itemTwo}>
             
-            <ListItem
-              leftAvatar={{ source: require("../../assets/mexico.png") }}
-              title={"México"}
-              subtitle={"Historias de los 32 estados de la república mexicana"}
-              containerStyle={styles.container}
-              contentContainerStyle={styles.container}
-              onPress={() => {
-                this.props.history.push("/historiesBoard/mx");
-              }}
-            />
-            <ListItem
-              leftAvatar={{ source: require("../../assets/inglaterra.png") }}
-              title={"Inglaterra"}
-              subtitle={"Historias de de la nueva y vieja Inglaterra"}
-              containerStyle={styles.container}
-              contentContainerStyle={styles.container}
-              onPress={() => {}}
-            />
-            
-          </View>
+              <ListItem
+                leftAvatar={{ source: require("../../assets/mexico.png") }}
+                title={"México"}
+                subtitle={"Historias de los 32 estados de la república mexicana"}
+                containerStyle={styles.container}
+                contentContainerStyle={styles.container}
+                onPress={() => {
+                  this.props.history.push("/historiesBoard/mx");
+                }}
+              />
+              <ListItem
+                leftAvatar={{ source: require("../../assets/inglaterra.png") }}
+                title={"Inglaterra"}
+                subtitle={"Historias de de la nueva y vieja Inglaterra"}
+                containerStyle={styles.container}
+                contentContainerStyle={styles.container}
+                onPress={() => {}}
+              />
+              
+            </View>
+          }
         </View>
       </ImageBackground>
     );

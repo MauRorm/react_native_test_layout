@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import {
   Input,
@@ -14,11 +15,12 @@ import {
   Header,
   Icon,
   Divider,
-  Overlay
+  Overlay,
+  Button
 } from "../../components/react-native-elements";
 import { Col, Row, Grid } from "react-native-easy-grid";
 //import Icon from "react-native-vector-icons/FontAwesome";
-import { Redirect, withRouter } from "react-router-native";
+import { Redirect, withRouter,  } from "react-router-native";
 import moment from "moment";
 
 import BgAudio from "react-native-background-audio";
@@ -28,7 +30,7 @@ const strings = {
   WELCOME_TO_LOGIN: "Welcome to the login screen!",
   EMAIL_PLACEHOLDER: "Email",
   PASSWORD_PLACEHOLDER: "Password",
-  dayMoment: "",
+  dayMoment: ""
 };
 
 const colors = {
@@ -44,9 +46,10 @@ const CUSTOM_STATE = {
   width: "0%",
   isOpenMenu: false,
   widthPrincipal: "100%",
-  searchText: "",
+  searchText: '',
   isOpenModal: false,
-  historyItem: {}
+  historyItem: {},
+  animating: true,
 };
 
 class Dashboard extends React.Component {
@@ -57,34 +60,31 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
     //this.props.match.params.idCountry
-    
-    var currentTimeR= moment();    // e.g. 11:00 pm
-    var startTime = moment('07:30 pm', "HH:mm a");
-    var endTime = moment('11:59:00 pm', "HH:mm a");
+    setTimeout(()=>{
+      this.setState({
+        animating: false,
+      })
+    }, 300);
+    var currentTimeR = moment(); // e.g. 11:00 pm
+    var startTime = moment("07:30 pm", "HH:mm a");
+    var endTime = moment("11:59:00 pm", "HH:mm a");
 
-    var startTimeTwo = moment('12:00 am', "HH:mm a");
-    var endTimeTwo = moment('07:20 am', "HH:mm a");
+    var startTimeTwo = moment("12:00 am", "HH:mm a");
+    var endTimeTwo = moment("07:20 am", "HH:mm a");
 
-    var startTimeThree = moment('07:21 am', "HH:mm a");
-    var endTimeThree = moment('07:29:00 pm', "HH:mm a");
+    var startTimeThree = moment("07:21 am", "HH:mm a");
+    var endTimeThree = moment("07:29:00 pm", "HH:mm a");
 
-
-    const amIBetween = currentTimeR.isBetween(startTime , endTime);
-    if (
-      currentTimeR.isBetween(startTime , endTime) === true
-    ) {
+    const amIBetween = currentTimeR.isBetween(startTime, endTime);
+    if (currentTimeR.isBetween(startTime, endTime) === true) {
       this.setState({
         dayMoment: "night"
       });
-    } else if (
-      currentTimeR.isBetween(startTimeTwo , endTimeTwo) === true
-    ) {
+    } else if (currentTimeR.isBetween(startTimeTwo, endTimeTwo) === true) {
       this.setState({
         dayMoment: "night"
       });
-    } else if (
-      currentTimeR.isBetween(startTimeThree , endTimeThree) === true
-    ) {
+    } else if (currentTimeR.isBetween(startTimeThree, endTimeThree) === true) {
       this.setState({
         dayMoment: "morning"
       });
@@ -107,6 +107,17 @@ class Dashboard extends React.Component {
     console.log("Login button pressed");
   }
 
+  getFilterResult(historiesArray = [], searchText = '') {
+    if(searchText.trim() === '') {
+      return historiesArray;
+    }
+    return historiesArray.filter((item)=>{
+      if(item.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
+        return item;
+      }
+    });
+  }
+
   render() {
     const { searchText } = this.state;
     const list = [
@@ -124,7 +135,7 @@ class Dashboard extends React.Component {
     const audio_options = {
       source: { local: require("../../assets/sh-lisas-theme.mp3") } //ex. require('./music/sample.mp3')
     };
-    const { dayMoment } = this.state;
+    const { dayMoment, animating } = this.state;
     const styles = StyleSheet.create({
       containerBkd: {
         height: "100%",
@@ -148,7 +159,7 @@ class Dashboard extends React.Component {
       },
 
       container: {
-        backgroundColor: '#FFFFFF50',
+        backgroundColor: "#FFFFFF50"
       },
 
       marginTopData: {
@@ -161,13 +172,23 @@ class Dashboard extends React.Component {
 
       modalStyle: {
         height: "100%",
-        backgroundColor: '#00000090',
+        backgroundColor: "#0D1334"
       },
 
       textStyle: {
-        color: '#FFFFFF',
-        fontWeight: 'bold',
+        color: "#C8CAD2",
+        fontWeight: "bold",
+        textAlign: "justify"
       },
+      textTitleStyle: {
+        color: "#C8CAD2",
+        fontWeight: "bold",
+        fontSize: 15,
+        textAlign: "center"
+      },
+      closeButtonStyle: {
+        marginBottom: '0',
+      }
     });
 
     const historiesArray = [
@@ -181,7 +202,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "00j01-34rc-rtqr-e3m5",
-        title: "cuerpos en puentes",
+        title: "En la carretera nueva de barranca",
         text:
           "En la carretera nueva de barranca larga a ventanilla ( puerto escondido) una amiga ingeniera civil me platicó que un túnel no lo podían colar por qué sucedían cosas muy extrañas, después de muchos atrasos lo lograron pero al parecer el encargado de la obra realizó un pacto que nadie supo de que trató",
         fecha: "26-08-2019",
@@ -189,7 +210,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "02kyukkyuij01-34rc-rtqr-e3m5",
-        title: "cuerpos en puentes 2",
+        title: " Bueno pero en realidad",
         text:
           " Bueno pero en realidad si fallecieron 11 personas en el lugar cuando se estaba colando la última sección del puente, ahí abajo esta una capilla muy pequeña con 11 cruces, lo se por que mi tío trabajó en ese tramo carretero y recuerdo cuando lo íbamos a ver y no estaba ninguna estructura del puente Calapa! También se accidentaron varios Yuncles y tractores.",
         fecha: "26-08-2019",
@@ -197,7 +218,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "0001-34kyurc-rtqr-e4ym5",
-        title: "cuerpos en puentes",
+        title: "Tengo familiares que trabajaron",
         text:
           ' Tengo familiares que trabajaron en la construcción de ese tramo de la carretera y ellos presenciaron varios " accidentes" que hicieron que trabajadores cayeran a las fozas cuando se estaba armando las pilotes, esas personas caían ahí y nos los sacaban, los dejaron enterrados.' +
           'También existen historias de lo que ahora es la antigua carretera que conectaba a puebla con la ciudad de Oaxaca, en el tramo de la carbonera a Telixtlahuaca existen varios puntos donde se ven fenómenos no normales, en en el lugar que le llaman en "el catrin" le dice así porque muchas personas han visto a una persona vestida de manera muy elegante.',
@@ -206,7 +227,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "0001-344gc-rkyuktqr-e3m5",
-        title: "cuerpos en puentes",
+        title: "Hay muchas historias",
         text:
           "Hay muchas historias, y la mayoría son reales, por eso los abuelitos de antes dicen, que cuando se va a hacer una obra que se tiene k hablar con el lugar bueno al menos haci lo hacen en mi pueblo de San Miguel el Grande Oaxaca. y que es hablar con el lugar, es pedirle permiso a las tierras, le echan su derecho que es comida, cerveza, aguardiente, refresco etc. Y al mismo tiempo se convive. Para k el lugar este satisfecho, y deje trabajar tranquilo y no aya accidentes a la hora, de trabajar oh después. Saludos desde Baja California.",
         fecha: "26-08-2019",
@@ -214,7 +235,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "03f01-34kuykrc-f7qr-e3m5",
-        title: "cuerpos en puentes",
+        title: "Esos es verdad, mi padre",
         text:
           "Esos es verdad, mi padre trabajo con ingenieros,cuando estaban haciendo una carretera hacia un pueblo a oaxaca, un día el ingeniero no estaba, y llego un hombre muy bien vestido preguntando por el ingeniero, que salio de la nada,que quería hablar con él, qué quería su parte, para eso el lugar donde estaban trabajando era muy difícil de pasar , tenían que dinamitar y aun así, no se dejaba el lugar, entonces se tuvo que dar ofrendas, al dueño del lugar , para poder pasar en ese lugar . es algo increíble, pero cierto.",
         fecha: "26-08-2019",
@@ -222,7 +243,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "0001-34kyukrc-rtqr-e3m5",
-        title: "cuerpos en puentes",
+        title: "Me paso algo muy parecido",
         text:
           "Me paso algo muy parecido cuando viajaba en ADO rumbo a puebla, iba en el aciento número 1 ya era tarde como las 2 de la mañana y justo al llegar a donde están los ventiladores (o generadores de energía eólica) se nos atravesó un rebaño de chivos y el de hasta atrás era el más grande,estaba parado en 2 patas y casi media lo que el autobús, lo más extraño es que solo el conductor y yo vimos todos los chivos, porqué cuando el conductor se frenó para no atropellarlos las personas le preguntaban que porque se frenó y cuando les decíamos el porque decían que no veían nada, durante todo el viaje a Puebla e incluso cuando llegamos a la CAPU yo iba escuchando una risa de niños, por eso ya no vuelvo a viajar de madrugada a Puebla.",
         fecha: "26-08-2019",
@@ -230,7 +251,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "00kyuk01-368rc-r2sqr-e3m5",
-        title: "cuerpos en puentes",
+        title: "Yo soy piloto custodio",
         text:
           "Yo soy piloto custodio, la verdad desde que empiezas a bajar hacia el puente, circulación Puebla- Oaxaca se siente pesado hasta el km 110 casi llegando al rodeo,me ha tocado subir en la noche o madrugada en ese tramo, despacio y la neta la parte que se siente más pesada es cuando estás cerca del túnel o por la falla geológica,no manches se me pone hasta la piel chinita siento que alguien me observa desde los cerros",
         fecha: "26-08-2019",
@@ -238,7 +259,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "0skyuk301-34rc-r5tqr-e3m5",
-        title: "cuerpos en puentes",
+        title: "En la cd de México, en la estación Barranca",
         text:
           "En la cd de México, en la estación Barranca del muerto, diario tiraban los andamios cuando construían el puente una noche se quedaron los ingenieros y algunos trabajadores entre ellos mi tío para ver quién deshacía el trabajo y dice que a las 3 am salió un Hombre muy bien vestido y preguntó por el ingeniero. Y le pidio 100 cadáveres si quería continuar la obra. Así que fueron a comprarlos en el servicio médico forense,",
         fecha: "26-08-2019",
@@ -246,7 +267,7 @@ class Dashboard extends React.Component {
       },
       {
         id: "0001-34rc-rtqr-e3kyukm5",
-        title: "cuerpos en puentes",
+        title: "Por lo regular siempre pasa eso",
         text:
           'Por lo regular siempre pasa eso en las construcciones carreteras , en el pueblo donde viven mis abuelos ( san Isidro paso ancho en oaxaca ) cuenta mi abuela que cuando se hizo el puente que comunica la población con otras mas , se les aviso que nadie se acercará ala construcción ( niños , hombres , mujeres ) durante la construcción nadie pasaba por ahí , después que se inauguró notaron que debajo habían veladoras a los pies del puente cuenta mi abuela que son las personas que murieron ahí " accidentalmente ',
         fecha: "26-08-2019",
@@ -304,8 +325,7 @@ class Dashboard extends React.Component {
             : require("../../assets/1509811479_raining.gif")
         }
       >
-
-      <Header
+        <Header
           placement={"left"}
           leftComponent={() => {
             return (
@@ -360,14 +380,30 @@ class Dashboard extends React.Component {
             <Divider style={{ backgroundColor: "blue" }} />
           </View>
           <View style={styles.itemTwo}>
-            <Input
+            {
+              animating === true
+              ?
+              <ActivityIndicator
+              animating = {animating}
+              color = '#bc2b78'
+              size = "large"
+              style = {{
+               flex: 1,
+               justifyContent: 'center',
+               alignItems: 'center',
+               height: 80
+            }}/>
+              :
+              <View style={styles.itemTwo}>
+              <Input
               value={searchText}
               placeholder="Busca titulo de historia"
-              leftIcon={{ type: "font-awesome", name: "chevron-left" }}
+              leftIcon={{ type: "font-awesome", name: "search" }}
+              placeholderTextColor='#bc2b78'
               onChangeText={searchText => this.setState({ searchText })}
             />
             <ScrollView>
-              {historiesArray.map(item => {
+              {this.getFilterResult(historiesArray, searchText).map(item => {
                 return (
                   <View key={item.id}>
                     <ListItem
@@ -386,20 +422,31 @@ class Dashboard extends React.Component {
                   </View>
                 );
               })}
-            </ScrollView>
+            </ScrollView>   
+            </View>         }
           </View>
         </View>
 
         <Overlay
           onBackdropPress={() => this.setState({ isOpenModal: false })}
           isVisible={this.state.isOpenModal}
+          style={styles.modalStyle}
+          windowBackgroundColor="rgba(255, 255, 255, .5)"
+          overlayBackgroundColor="#0D1334"
         >
           <View style={styles.modalStyle}>
-          <Text style={styles.textStyle}>{this.state.historyItem.title}</Text>
-          <ScrollView>
-            <Divider style={{ backgroundColor: "blue" }} />
-            <Text style={styles.textStyle}>{this.state.historyItem.text}</Text>
-          </ScrollView>
+            <Text style={styles.textTitleStyle}>
+              {this.state.historyItem.title
+                ? this.state.historyItem.title.toUpperCase()
+                : ""}
+            </Text>
+            <ScrollView style={styles.tamano}>
+              <Divider style={{ backgroundColor: "blue" }} />
+              <Text style={styles.textStyle}>
+                {"~" + this.state.historyItem.text}
+              </Text>
+              <Button style={styles.closeButtonStyle} title="Cerrar" type="outline" onPress={() => this.setState({ isOpenModal: false })}/>
+            </ScrollView>
           </View>
         </Overlay>
       </ImageBackground>
